@@ -1,0 +1,76 @@
+body {
+    background: linear-gradient(135deg, #1a103d, #2a174f);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    width: 700px;
+    margin: 50px auto;
+    padding: 40px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(150, 80, 255, 0.4);
+}
+
+button {
+    background: linear-gradient(45deg, #9d4edd, #c77dff);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.prediction.fake {
+    color: #ff4d6d;
+}
+
+.prediction.real {
+    color: #4cc9f0;
+}
+
+.risk.high {
+    color: #ff4d6d;
+}
+
+.risk.suspicious {
+    color: #ffb703;
+}
+
+.risk.safe {
+    color: #80ed99;
+}
+
+.confidence-bar {
+    width: 80%;
+    height: 10px;
+    background: #333;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #9d4edd, #c77dff);
+    border-radius: 10px;
+}
+
+.image-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.image-box img {
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(150, 80, 255, 0.5);
+}

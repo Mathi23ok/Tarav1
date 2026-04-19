@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TARA - AI Forensic Engine</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e1b2e, #2d1e4f);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 60px;
+            font-size: 48px;
+            background: linear-gradient(90deg, #c084fc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 600px;
+            margin: 40px auto;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+        }
+
+        input[type="file"] {
+            margin: 20px 0;
+        }
+
+        button {
+            background: #a855f7;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #9333ea;
+            transform: scale(1.05);
+        }
+
+        .result-section {
+            margin-top: 30px;
+        }
+
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .confidence-bar {
+            width: 80%;
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            margin: 10px auto;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #c084fc, #a855f7);
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .image-box img {
+            width: 250px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .footer {
+            margin-top: 80px;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        .case-message {
+            margin-top: 12px;
+            color: #e9d5ff;
+        }
+
+        .upload-wrapper {
+            margin: 20px 0;
+        }
+
+        .custom-upload {
+            background: linear-gradient(90deg, #a855f7, #9333ea);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .custom-upload:hover {
+            transform: scale(1.05);
+        }
+
+        #file-name {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .case-selection {
+            margin: 20px 0;
+        }
+
+        .case-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(168,85,247,0.3);
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .case-btn:hover {
+            background: rgba(168,85,247,0.2);
+        }
+
+        .active-case {
+            background: linear-gradient(90deg, #a855f7, #9333ea);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>TARA - AI Detection</h1>
+
+    <div class="card">
+
+        <form action="/analyze-ui" method="post" enctype="multipart/form-data">
+            <div class="upload-wrapper">
+                <label for="file-upload" class="custom-upload">
+                    Upload Image
+                </label>
+                <input id="file-upload" type="file" name="file" required hidden>
+                <span id="file-name">No image selected</span>
+            </div>
+
+            <div class="case-selection">
+                <input type="hidden" name="case_type" id="case_type" required>
+
+                <button type="button" class="case-btn" onclick="selectCase('food_refund', this)">Food Refund</button>
+                <button type="button" class="case-btn" onclick="selectCase('document_verification', this)">Document Verification</button>
+                <button type="button" class="case-btn" onclick="selectCase('social_media_misuse', this)">Social Media Misuse</button>
+                <button type="button" class="case-btn" onclick="selectCase('personal_safety', this)">Personal Safety</button>
+            </div>
+            <button type="submit">Analyze Image</button>
+        </form>
+
+        {% if error %}
+            <div class="result-section">
+                <h3 style="color:#ef4444;">{{ error }}</h3>
+            </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result-section">
+
+            <h2>Analysis Result</h2>
+
+            <div class="prediction">
+                Prediction: {{ result.predicted_label }}
+            </div>
+
+            <p>Confidence: {{ result.confidence }}</p>
+
+            <div class="confidence-bar">
+                <div class="confidence-fill"
+                     style="width: {{ result.confidence * 100 }}%">
+                </div>
+            </div>
+
+            <p class="case-message">
+                {{ result.case_message }}
+            </p>
+
+            <p>Processing Time: {{ result.processing_time }} sec</p>
+
+            <div class="image-row">
+                <div class="image-box">
+                    <h4>Uploaded Image</h4>
+                    <img src="{{ result.uploaded_image }}">
+                </div>
+
+                <div class="image-box">
+                    <h4>AI Focus Map</h4>
+                    <img src="{{ result.explanation_image }}">
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="footer">
+        Built for Hackathon Demo
+    </div>
+
+    <script>
+    document.getElementById("file-upload").addEventListener("change", function() {
+        const fileName = this.files[0] ? this.files[0].name : "No image selected";
+        document.getElementById("file-name").textContent = fileName;
+    });
+
+    function selectCase(value, button) {
+        document.getElementById("case_type").value = value;
+
+        document.querySelectorAll(".case-btn").forEach(btn => {
+            btn.classList.remove("active-case");
+        });
+
+        button.classList.add("active-case");
+    }
+    </script>
+
+</body>
+</html>

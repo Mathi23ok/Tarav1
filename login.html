@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TARA Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-violet-900 via-purple-800 to-fuchsia-700 min-h-screen flex items-center justify-center">
+
+    <!-- Glow Background -->
+    <div class="absolute w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-30 top-10 left-10 animate-pulse"></div>
+    <div class="absolute w-96 h-96 bg-fuchsia-500 rounded-full blur-3xl opacity-30 bottom-10 right-10 animate-pulse"></div>
+
+    <div class="relative bg-white bg-opacity-10 backdrop-blur-xl p-10 rounded-3xl shadow-2xl w-96 text-white border border-white border-opacity-20">
+
+        <h1 class="text-3xl font-bold text-center mb-6">TARA Login</h1>
+
+        <form action="/login" method="post" class="space-y-4">
+
+            <div>
+                <label class="block mb-1 text-sm">Username</label>
+                <input type="text" name="username" required
+                       class="w-full p-2 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 focus:outline-none focus:ring-2 focus:ring-purple-400 text-white">
+            </div>
+
+            <div>
+                <label class="block mb-1 text-sm">Password</label>
+                <input type="password" name="password" required
+                       class="w-full p-2 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 focus:outline-none focus:ring-2 focus:ring-purple-400 text-white">
+            </div>
+
+            <button type="submit"
+            
+                    class="w-full bg-purple-600 hover:bg-purple-700 transition duration-300 p-2 rounded-lg font-semibold">
+                Login
+            </button>
+
+        </form>
+
+        {% if error %}
+            <p class="text-red-400 mt-4 text-center">{{ error }}</p>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
