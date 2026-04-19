@@ -1,5 +1,8 @@
 # TARA v1 — Multi-Signal Image Forensics System
 
+v1: rule-based multi-signal system (EfficientNet + heuristics)  
+v2: learned fusion system (ResNet + FusionNet)
+
 ## Overview
 TARA is a system for detecting AI-generated or manipulated images using deep learning + forensic signals instead of relying on a single model.
 
